@@ -1,0 +1,88 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+class Mystack {
+    int *arr;
+    int cap, top1, top2;
+
+public:
+    Mystack(int n) {
+        cap = n;
+        top1 = -1;
+        top2 = n;
+        arr = new int[n];
+    }
+
+    void push1(int num) {
+        if (top1 < top2 - 1) {
+            top1++;
+            arr[top1] = num;
+        }
+    }
+
+    void push2(int num) {
+        if (top1 < top2 - 1) {
+            top2--;
+            arr[top2] = num;
+        }
+    }
+
+    int pop1() {
+        if (top1 >= 0) {
+            int x = arr[top1];
+            top1--;
+            return x;
+        }
+        return -1; // Underflow for stack 1
+    }
+
+    int pop2() {
+        if (top2 < cap) {
+            int x = arr[top2];
+            top2++;
+            return x;
+        }
+        return -1; // Underflow for stack 2
+    }
+
+    ~Mystack() {
+        delete[] arr;
+    }
+};
+
+int main() {
+    int n, q;
+    cout<<"size of the array: ";
+    cin>>n;
+    cout<<"Number of operations: ";
+    cin >> q;  // Read size of array and number of operations
+
+    Mystack twoStack(n);  // Initialize stack with capacity `n`
+
+    for (int i = 0; i < q; i++) {
+        int type, stackNo;
+        cout<<"Enter the type  = 1(for push): ";
+        cin >> type;
+        cout<<"Which stackNumber you want to push your element:";
+        cin >> type >> stackNo;
+
+        if (type == 1) {  // Push operation
+            int num;
+            cout<<"Enter the number: ";
+            cin >> num;
+            if (stackNo == 1) {
+                twoStack.push1(num);
+            } else if (stackNo == 2) {
+                twoStack.push2(num);
+            }
+        } else if (type == 2) {  // Pop operation
+            if (stackNo == 1) {
+                cout << twoStack.pop1() << endl;
+            } else if (stackNo == 2) {
+                cout << twoStack.pop2() << endl;
+            }
+        }
+    }
+
+    return 0;
+}
