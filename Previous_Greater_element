@@ -1,0 +1,66 @@
+//given an array of distinct integer, find closest(positive-wise) greater on left of every element. If there is no greater element on left, then print -1
+
+// I/P = 15, 10, 18, 12, 4, 6, 2, 8;
+// O/P = -1,15,-1,18,12,12,6,12;
+
+
+
+#include <bits/stdc++.h>
+using namespace std;
+
+// Brutte-force Approach O(N^2)
+
+void printPreGreater(int arr[], int n) {
+    for (int i = 0; i < n; i++) {
+        int j;
+        bool found = false;
+
+        for (j = i - 1; j >= 0; j--) {
+            if (arr[j] > arr[i]) {
+                cout << arr[j] << " ";
+                found = true;
+                break;
+            }
+        }
+        
+        // If no greater previous element was found, print "-1"
+        if (!found) {
+            cout << "-1" << " ";
+        }
+    }
+}
+
+
+
+
+
+
+// T.C  = O(N);
+
+void printPreGreater(int arr[], int n) {
+    stack<int> s;
+    s.push(arr[0]);
+    cout << "-1 ";  // For the first element, there is no previous element
+
+    for (int i = 1; i < n; i++) {
+        // Pop elements from the stack until we find a greater element or stack becomes empty
+        while (!s.empty() && s.top() <= arr[i]) {
+            s.pop();
+        }
+        
+        // If the stack is empty, there is no greater previous element
+        int pg = (s.empty()) ? -1 : s.top();
+        cout << pg << " ";
+        
+        // Push the current element to the stack
+        s.push(arr[i]);
+    }
+}
+
+int main() {
+    int n = 8;
+    int arr[] = {15, 10, 18, 12, 4, 6, 2, 8};  
+    printPreGreater(arr, n);  
+    
+    return 0;
+}
