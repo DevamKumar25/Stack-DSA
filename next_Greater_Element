@@ -1,0 +1,79 @@
+Que = Given an array of the interger , find the next greater element( Positive-wise closest and on right side) for every array element.
+
+I/P = arr[] => {5, 15, 10, 8, 6, 12, 9, 18}
+O/P = 
+
+
+
+
+
+#include <bits/stdc++.h>
+using namespace std;
+
+
+
+** Brute-force approach**
+
+//  Time complexity = O(N^2)
+
+void nextGreater(int arr[], int n) {
+    for(int i = 0; i < n; i++) {
+        bool found = false;
+        int j;
+        for( j = i + 1; j < n; j++) {
+            if(arr[j] > arr[i]) {
+                cout << arr[j] << " ";
+                found = true;
+                break;
+            }
+        }
+        if(j==n) {
+            cout << "-1 ";
+        }
+    }
+}
+
+int main() {
+    int n = 8;
+    int arr[n] = {5, 15, 10, 8, 6, 12, 9, 18};
+    nextGreater(arr, n);
+    return 0;
+}
+
+
+
+
+
+
+
+
+
+
+**  Efficient - Approach ****
+
+
+// Time-complexity = O(N)
+?? Auxiliary-s[ace = O(N)
+
+
+void nextGreater(int arr[], int n){
+    stack<int> st;
+    vector<int> result(n);
+    
+    st.push(arr[n-1]);
+    result[n-1] = -1;
+    
+    for(int i=n-2;i>=0;i--){
+        while(st.empty()==false && st.top()<=arr[i]){
+            st.pop();
+        }
+        
+        result[i] = (st.empty())? -1 : st.top();
+        
+        st.push(arr[i]);
+    }
+    
+    for(int i=0;i<n;i++){
+        cout<<result[i]<<" ";
+    }
+}
