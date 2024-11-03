@@ -1,0 +1,58 @@
+ques = You have been given an array/list 'HEIGHTS' of length ‘N. 'HEIGHTS' represents the histogram and each element of 'HEIGHTS' represents the height of the histogram bar.
+Consider that the width of each histogram is 1.
+You are supposed to return the area of the largest rectangle possible in the given histogram.
+
+I/P = arr[] => {6 , 2 , 5 , 4 , 1 ,  5 , 6 };
+O/P = 10
+
+
+
+#include <bits/stdc++.h>
+using namespace std;
+
+// Time complexity = Therta(N^2)
+// space complexity = O(1)
+
+int largestRectangle(vector<int> &arr) {
+    int n = arr.size();
+    int res = 0;
+
+    // Iterate through each bar as a starting point
+    for (int i = 0; i < n; i++) {
+        int curr = arr[i];
+
+        // Expand to the left
+        for (int j = i - 1; j >= 0; j--) {
+            if (arr[j] >= arr[i]) {
+                curr += arr[i];
+            } else {
+                break;
+            }
+        }
+
+        // Expand to the right
+        for (int j = i + 1; j < n; j++) {
+            if (arr[j] >= arr[i]) {
+                curr += arr[i];
+            } else {
+                break;
+            }
+        }
+
+        // Update the maximum area found
+        res = max(res, curr);
+    }
+    return res;
+}
+
+int main() {
+        int n;
+        cin >> n;
+        vector<int> heights(n);
+        for (int i = 0; i < n; i++) {
+            cin >> heights[i];
+        }
+        cout<<"Maximum rectangular area : ";
+        cout << largestRectangle(heights) << endl;
+    return 0;
+}
