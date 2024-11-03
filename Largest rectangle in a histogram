@@ -56,3 +56,41 @@ int main() {
         cout << largestRectangle(heights) << endl;
     return 0;
 }
+
+
+
+
+
+
+**  Efficient Approach***
+
+// Time complexity  = O(N);   // once push the element in the stack and once pop the element from the stack;
+// space complexity = O(N)
+
+int getMaxArea(int arr[], int n) {
+    stack<int> st;
+    int res = 0;
+    int topidx;   // top index
+    int curr;     // current area for the popped element
+    
+    for (int i = 0; i < n; i++) {
+        // Maintain a stack with indices of increasing heights
+        while (!st.empty() && arr[st.top()] >= arr[i]) {
+            topidx = st.top();
+            st.pop();
+            // Calculate the area with arr[topidx] as the smallest height
+            curr = arr[topidx] * (st.empty() ? i : (i - st.top() - 1));
+            res = max(curr, res);
+        }
+        st.push(i);
+    }
+    
+    // Process remaining elements in the stack
+    while (!st.empty()) {
+        topidx = st.top();
+        st.pop();
+        curr = arr[topidx] * (st.empty() ? n : (n - st.top() - 1));
+        res = max(curr, res);
+    }
+    return res;
+}
