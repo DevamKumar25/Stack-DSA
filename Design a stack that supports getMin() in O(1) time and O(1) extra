@@ -1,0 +1,68 @@
+#include <iostream>
+#include <stack>
+using namespace std;
+
+class SpecialStack {
+public:
+    stack<int> s;
+    int minEle;
+
+    void push(int data) {
+        // If stack is empty, initialize minEle with data and push data directly
+        if (s.empty()) {
+            minEle = data;
+            s.push(data);
+        } 
+        else if (data <= minEle) {
+            // Push modified value to encode the new minimum
+            s.push(2 * data - minEle);
+            minEle = data;
+        } 
+        else {
+            // Normal push if data is greater than minEle
+            s.push(data);
+        }
+    }
+
+    void pop() {
+        if (s.empty()) {
+            return; // Stack is empty, nothing to pop
+        }
+
+        int t = s.top();
+        s.pop();
+
+        if (t <= minEle) {
+            // The popped value is an encoded minimum
+           // cout << minEle << endl;
+            minEle = 2 * minEle - t;  // Restore the previous minimum
+        } 
+        else {
+           // cout << t << endl; // Regular pop value
+        }
+    }
+
+    int top() {
+        if (s.empty()) {
+            return -1; // Return -1 if stack is empty
+        }
+        
+        int t = s.top();
+        if (t <= minEle) {
+            // Encoded value, so return the current minimum
+            return minEle;
+        } 
+        else {
+            return t; // Regular top value
+        }
+    }
+
+    int getMin() {
+        if (s.empty()) {
+            return -1; // Return -1 if stack is empty
+        } 
+        else {
+            return minEle; // Return the current minimum
+        }
+    }
+};
