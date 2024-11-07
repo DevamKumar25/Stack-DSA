@@ -1,0 +1,68 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+// Time complexity = O(N) 
+//  auxiliary space = O(N) use stack
+
+int celebrity(vector<vector<int>>& arr) {
+    stack<int> st;
+    int n = arr.size();
+    
+    // Push all individuals onto the stack
+    for (int i = n - 1; i >= 0; i--) {
+        st.push(i);
+    }
+    
+    // Find the potential celebrity
+    while (st.size() > 1) {
+        int first = st.top();
+        st.pop();
+        int second = st.top();
+        st.pop();
+        
+        // If first knows second and second doesn't know first, push second
+        if (arr[first][second] && !arr[second][first]) {
+            st.push(second);
+        }
+        // If second knows first and first doesn't know second, push first
+        else if (arr[second][first] && !arr[first][second]) {
+            st.push(first);
+        }
+    }
+    
+    // If stack is empty, no celebrity found
+    if (st.empty()) {
+        return -1;
+    }
+    
+    // Candidate celebrity found, verify it
+    int candidate = st.top();
+    
+    int rowSum = 0, colSum = 0;
+    for (int i = 0; i < n; i++) {
+        rowSum += arr[candidate][i];
+        colSum += arr[i][candidate];
+    }
+    
+    // A celebrity should have row sum 0 and column sum n-1
+    return (rowSum == 0 && colSum == n - 1) ? candidate : -1;
+}
+
+int main() {
+    vector<vector<int>> arr = {
+        {0, 1, 0, 1, 1},
+        {0, 0, 0, 1, 1},
+        {0, 1, 0, 1, 0},
+        {0, 0, 0, 0, 0},
+        {1, 0, 1, 1, 0}
+    };
+    
+    int result = celebrity(arr);
+    if (result == -1) {
+        cout << "No celebrity found." << endl;
+    } else {
+        cout << "Celebrity is person " << result << endl;
+    }
+
+    return 0;
+}
