@@ -1,0 +1,69 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+// Time complexity = O(N);
+// sapce complexity = O(N)
+
+int precedence(char c) {
+    if(c == '^') {
+        return 3;
+    }
+    else if(c == '*' || c == '/') {
+        return 2;
+    }
+    else if(c == '+' || c == '-') {
+        return 1;
+    }
+    else {
+        return -1;
+    }
+}
+
+string infixToPostfix(string str) {
+    int n = str.length();
+    stack<char> st;      // for operators
+    string postfix;       // for the postfix result
+
+    for(int i = 0; i < n; i++) {
+        char c = str[i];
+
+        // If character is an operand (alphanumeric), add it to postfix
+        if(isalnum(c)) {
+            postfix += c;
+        }
+        // If character is '(', push to stack
+        else if(c == '(') {
+            st.push('(');
+        }
+        // If character is ')', pop until '(' is found
+        else if(c == ')') {
+            while(!st.empty() && st.top() != '(') {
+                postfix += st.top();
+                st.pop();
+            }
+            st.pop(); // remove '(' from stack
+        }
+        // Operator encountered
+        else {
+            while(!st.empty() && precedence(st.top()) >= precedence(c)) {
+                postfix += st.top();
+                st.pop();
+            }
+            st.push(c);
+        }
+    }
+
+    // Pop all remaining operators in stack
+    while(!st.empty()) {
+        postfix += st.top();
+        st.pop();
+    }
+
+    return postfix;
+}
+
+int main() {
+    string s = "3^(1+1)";
+    cout << "Postfix expression: " << infixToPostfix(s) << endl;
+    return 0;
+}
