@@ -5,87 +5,81 @@ A stack is a linear data structure that follows LIFO (Last In First Out) order.
 
 Example: A pile of plates — the last plate you put is the first you remove.
 
-2. Explain design choices
-
-I will implement stack using a fixed-size array (dynamic array also possible, but fixed-size is simple).
-
-I’ll maintain three key things:
-
-An array to store elements.
-
-A variable cap for capacity (max size).
-
-A variable top to track the index of the last element (initially -1 since stack is empty).
 
 
-Overflow occurs when the stack is full and we try to push another element. For example, in a stack of size 3, if we already pushed 10, 20, 30, then pushing 40 will cause overflow."
-
-"Underflow occurs when the stack is empty and we try to pop or peek. For example, if we already popped all elements, then calling pop again will cause underflow.
+I can implement stack using raw arrays (with fixed capacity), but in modern C++, I prefer using vector because it manages memory automatically and reduces chances of bugs like overflow/underflow.
 
 
-
-#include <bits/stdc++.h>
+All basic stack operations (push, pop, peek, size, isEmpty) work in O(1) time. The space complexity is O(n), where n is the number of elements in the stack.
+    In an array-based stack, we pre-allocate memory, while in a vector-based implementation, memory grows dynamically as needed.
+    
+    
+    #include <bits/stdc++.h>
 using namespace std;
 
-struct Mystack {
-    int *arr;   
-    int cap;
-    int top;
-    
-    Mystack(int c) {
+struct MyStack {
+    vector<int> arr;   // dynamic array (vector)
+    int cap;           // maximum capacity
+
+    MyStack(int c) {
         cap = c;
-        arr = new int[cap];
-        top = -1;
     }
-    
+
     void push(int x) {
-        if (top == cap - 1) {
-            cout << "Overflow" << endl;
+        if (arr.size() == cap) {
+            cout << "Overflow\n";
             return;
         }
-        top++;
-        arr[top] = x;
+        arr.push_back(x);
     }
-    
+
     int pop() {
-        if (top == -1) {
-            cout << "Underflow" << endl;
-            return INT_MIN;  // sentinel value
+        if (arr.empty()) {
+            cout << "Underflow\n";
+            return INT_MIN;
         }
-        int res = arr[top];
-        top--;
+        int res = arr.back();
+        arr.pop_back();
         return res;
     }
-    
+
     int peek() {
-        if (top == -1) {
-            cout << "Underflow" << endl;
-            return INT_MIN;  // sentinel value
+        if (arr.empty()) {
+            cout << "Underflow\n";
+            return INT_MIN;
         }
-        return arr[top];
+        return arr.back();
     }
-    
+
     int size() {
-        return (top + 1);
+        return arr.size();
     }
-    
+
     bool isEmpty() {
-        return (top == -1);
+        return arr.empty();
     }
 };
 
 int main() {
-    Mystack s(5);
-    s.push(5);
-    s.push(25);
-    s.push(35);
-    s.push(45);
-    s.push(55);
-    
-    cout << "Size of the stack is : " << s.size() << endl;
-    cout << "Pop element : " << s.pop() << endl;
-    cout << "Size of the stack is : " << s.size() << endl;
-    cout << "Peek Element : " << s.peek() << endl;
-    cout << "Is Empty : " << s.isEmpty() << endl;
+    MyStack s(5);
+
+    s.push(10);
+    s.push(20);
+    s.push(30);
+    s.push(40);
+    s.push(50);
+    s.push(60); // Overflow
+
+    cout << "Size: " << s.size() << endl;
+    cout << "Top element: " << s.peek() << endl;
+
+    cout << "Pop: " << s.pop() << endl;
+    cout << "Pop: " << s.pop() << endl;
+
+    cout << "Size: " << s.size() << endl;
+    cout << "Is Empty: " << s.isEmpty() << endl;
+
     return 0;
 }
+
+
